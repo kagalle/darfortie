@@ -1,5 +1,18 @@
 import optparse
 import logging
+# returns a dictionary of values to be used as parameters in the dar command:
+#   config : string, possibly None
+#   prune : list of string, possibly empty
+#   incremental : boolean 
+#   source_path : string
+#   dest_path_and_base_name : string
+
+# get params
+# this works, but on second thought I would rather keep the dar switches
+# explicitly on the dar command line instead of buried in variables.
+# so the params{} dictionary is fine, but without putting in, e.g. -R, etc.
+(params['config'], params['prune'], params['incremental'], source_path, 
+    dest_path_and_base_name)
 
 # provides:
 #   config parameter string
@@ -14,7 +27,7 @@ def parse(log):
     "name and dar itself will supply slice numbers to form the complete filename."
     epilogString = "Based on http://dar.linux.free.fr/doc/mini-howto/dar-differential-backup-mini-howto.en.html"
     p = optparse.OptionParser(usage=usageString, description=descriptionString, epilog=epilogString)
-    
+
     # -c --config: specify .dar config file --> conf
     p.add_option("-c", "--config", action="store", dest="conf", metavar="config_filespec",
         help="filespec of dar config file to use instead of .darrc or etc/darrc.")
@@ -29,35 +42,29 @@ def parse(log):
         help="search for previous backup to use for incremental backup (dar -A).  " +
         "Finds most recent like-named backup in destination folder.")
     
+    # dictionary to return
+    params = {}
+
     # parse command line
     opts, args = p.parse_args()
-    
-    # define config parameter string
-    if opts.conf is None:
-      conf = ""
-    else:
-      conf = "--noconf --batch " + opts.conf + " "
-    log.info("conf=" + str(conf))
-    
-    # define prune paramter string
-    prune = ""
-    for onePath in opts.prune:
-      prune = prune + "-P " + onePath + " "
-    log.info("prune=" + prune)
-    
-    #define incremental parameter string
-    incremental = opts.incremental
-    log.info("incremental=" + str(incremental))
     
     if len(args) != 2:
         p.print_usage()
         exit()
     
-    source_path = args[0]
-    log.info("source_path=" + source_path)
-    dest_path_and_base_name = args[1]
-    log.info("dest_path_and_base_name=" + dest_path_and_base_name)
+    params['config'] = opts.conf
+    params['prune'] = opts.prune
+    params['incremental'] = opts.incremental
+    params['source_path'] = args[0]
+    params['dest_path_and_base_name'] = args[1]
 
-    # need to gather up 
-    return (conf, prune, incremental, source_path, dest_path_and_base_name)
+    log.info("params:config=" + params['config'])
+    log.info("params:prune count=" + len(params['prune'])
+    for onePath in params['prune']:
+        log.info("params:prune=" + onePath)
+    log.info("params:incremental=" + str(params['incremental']))
+    log.info("params:source_path=" + params['source_path'])
+    log.info("params:dest_path_and_base_name=" + params['dest_path_and_base_name'])
+
+    return params
 
