@@ -11,19 +11,14 @@
 #    about the current environment (/etc/darrc, ~/.darrc).
 #    It also allows you to pass thru dar prune paths.
 # Note on destination naming convensions:  TODO
-#TODO    Return values:
+#    Return values:
 #      1xx, where xx is any error value returned from dar during archive creation.
 #      2yy, where yy is any error value returned from dar during archive testing.
 #        dar return values range from 1 to 11 (see dar man page, "EXIT CODES")
 #      Returns 0 on success (both create and test succeeded).
-# TODO:  I need to test for "None" return values in the incremental section.
 # TODO: test for existance of dar and if not found exit with error code.
-# TODO: exit with code if command line params are not correct (in addition to printing usage information)
 # TODO: add support for restoring a batch of archives
 # TODO: packaging: http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
-# Version: 1.0
-# Revision History: 
-#       22.08.2005 - Creation
 
 import subprocess
 import logging
@@ -74,10 +69,12 @@ if params['incremental']:
     # strip of .xx.dar
     full_previous_file = dar_backup_previous_file.get_previous_file(params['dest_path_and_base_name'])
     log.info("full_previous_file=" + full_previous_file)
-    previous_file = dar_backup_previous_file.remove_slice_number_and_extension(full_previous_file)
-    log.info("previous_file=" + previous_file)
-    process_strings.append('-A')
-    process_strings.append(previous_file)
+    if full_previous_file is not None:
+        previous_file = dar_backup_previous_file.remove_slice_number_and_extension(full_previous_file)
+        log.info("previous_file=" + previous_file)
+        if previous_file is not None:
+            process_strings.append('-A')
+            process_strings.append(previous_file)
 
 # define prune paramter string
 for onePath in params['prune']:
@@ -97,6 +94,8 @@ del(i)
 
 # make call to dar
 return_code = subprocess.call(process_strings, shell=False)
+if return_code > 0:
+    return_code = return_code + 100
     
 # log return value
 log.info('dar create archive return value=' + str(return_code))
@@ -112,5 +111,7 @@ if return_code = 0:
     test_return_code = subprocess.call(test_process_strings, shell=False)
     # log return value
     log.info('dar test archive return value=' + str(test_return_code))
-  
+    if test_return_code > 0:
+        return_code = test_return_code + 200
+exit(return_code)
 

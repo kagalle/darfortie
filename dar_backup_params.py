@@ -48,9 +48,11 @@ def parse(log):
     # parse command line
     opts, args = p.parse_args()
     
+    # Note optparse errors return exit code 2.
+    
     if len(args) != 2:
         p.print_usage()
-        exit()
+        exit(1)
     
     params['config'] = opts.conf
     params['prune'] = opts.prune
