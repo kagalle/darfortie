@@ -1,6 +1,7 @@
 import optparse
 import logging
 # returns a dictionary of values to be used as parameters in the dar command:
+#   dar_path : path and name to dar executable, optional, defaults to 'dar'
 #   config : string, possibly None
 #   prune : list of string, possibly empty
 #   incremental : boolean 
@@ -28,6 +29,10 @@ def parse(log):
     epilogString = "Based on http://dar.linux.free.fr/doc/mini-howto/dar-differential-backup-mini-howto.en.html"
     p = optparse.OptionParser(usage=usageString, description=descriptionString, epilog=epilogString)
 
+    # -d --dar: dar filespec --> dar_path
+    p.add_option("-d", "--dar", action="store", dest="dar_path", metavar="dar_filespec",
+        help="filespec of dar executable; defaults to 'dar'")
+
     # -c --config: specify .dar config file --> conf
     p.add_option("-c", "--config", action="store", dest="conf", metavar="config_filespec",
         help="filespec of dar config file to use instead of .darrc or etc/darrc.")
@@ -54,12 +59,14 @@ def parse(log):
         p.print_usage()
         exit(1)
     
+    params['dar_path'] = opts.dar_path
     params['config'] = opts.conf
     params['prune'] = opts.prune
     params['incremental'] = opts.incremental
     params['source_path'] = args[0]
     params['dest_path_and_base_name'] = args[1]
 
+    log.info("params:dar_path=" + params['dar_path'])
     log.info("params:config=" + params['config'])
     log.info("params:prune count=" + len(params['prune'])
     for onePath in params['prune']:

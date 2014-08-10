@@ -31,15 +31,19 @@ import dar_backup_previous_file
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger('dar_backup')
 
-# build up a list of strings to send into the subprocess
-process_strings = []
-process_strings.append('/usr/bin/dar')
-
 # params to directly use in the call to dar
 params = {}
 
 # get params
 params = dar_backup_params.parse(log)
+
+# build up a list of strings to send into the subprocess
+process_strings = []
+
+if params['dar_path'] is not None:
+    process_strings.append(params['dar_path'])
+else:    
+    process_strings.append('dar')
 
 # define config parameter string
 if params['config'] is not None:
