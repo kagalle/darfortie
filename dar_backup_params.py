@@ -8,18 +8,15 @@ import logging
 #   source_path : string
 #   dest_path_and_base_name : string
 
-# get params
-# this works, but on second thought I would rather keep the dar switches
-# explicitly on the dar command line instead of buried in variables.
+# Keep the dar switches explicitly on the dar command line instead of buried in variables.
 # so the params{} dictionary is fine, but without putting in, e.g. -R, etc.
-(params['config'], params['prune'], params['incremental'], source_path, 
-    dest_path_and_base_name)
 
 # provides:
 #   config parameter string
 #   prune parameter string
 #   incremental boolean
-def parse(log):
+def parse():
+    log = logging.getLogger('dar_backup_params')
     usageString = "usage: %prog [options] <source_path> <dest_path_and_base_name>"
     descriptionString = "A front-end for dar that supports incremental backups based on " + \
     "the existing backups found in the destination folder.  <source_path> is the " + \
@@ -66,14 +63,17 @@ def parse(log):
     params['source_path'] = args[0]
     params['dest_path_and_base_name'] = args[1]
 
-    log.info("params:dar_path=" + params['dar_path'])
-    log.info("params:config=" + params['config'])
-    log.info("params:prune count=" + len(params['prune'])
-    for onePath in params['prune']:
-        log.info("params:prune=" + onePath)
+    log.info("params:dar_path=" + str(params['dar_path']))
+    log.info("params:config=" + str(params['config']))
+    if params['prune'] is None:
+        log.info("params:prune is None")
+    else:
+        log.info("params:prune count=" + len(params['prune']))
+        for onePath in params['prune']:
+            log.info("params:prune=" + onePath)
     log.info("params:incremental=" + str(params['incremental']))
-    log.info("params:source_path=" + params['source_path'])
-    log.info("params:dest_path_and_base_name=" + params['dest_path_and_base_name'])
+    log.info("params:source_path=" + str(params['source_path']))
+    log.info("params:dest_path_and_base_name=" + str(params['dest_path_and_base_name']))
 
     return params
 

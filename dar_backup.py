@@ -28,6 +28,13 @@ import dar_backup_params
 import datetime
 import dar_backup_previous_file
 
+def add_dar_path_to_process_strings(params, process_strings):
+    if params['dar_path'] is not None:
+        process_strings.append(params['dar_path'])
+    else:    
+        process_strings.append('dar')
+
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger('dar_backup')
 
@@ -35,15 +42,12 @@ log = logging.getLogger('dar_backup')
 params = {}
 
 # get params
-params = dar_backup_params.parse(log)
+params = dar_backup_params.parse()
 
 # build up a list of strings to send into the subprocess
 process_strings = []
 
-if params['dar_path'] is not None:
-    process_strings.append(params['dar_path'])
-else:    
-    process_strings.append('dar')
+add_dar_path_to_process_strings(params, process_strings)
 
 # define config parameter string
 if params['config'] is not None:
@@ -60,7 +64,7 @@ date_string = date_now.strftime("%Y%m%d_%H%M") + "UTC"
 log.info("date_string=" + date_string)
 
 # create the destination basename (includes path, if any)
-destination_basename = dest_path_and_base_name + "_" + date_string
+destination_basename = params['dest_path_and_base_name'] + "_" + date_string
 log.info("destination_basename=" + destination_basename)
 
 # archive to create
@@ -81,14 +85,15 @@ if params['incremental']:
             process_strings.append(previous_file)
 
 # define prune paramter string
-for onePath in params['prune']:
-    process_strings.append('-P ')
-    process_strings.append(onePath)
+if params['prune'] is not None:
+    for onePath in params['prune']:
+        process_strings.append('-P')
+        process_strings.append(onePath)
 
 # exclude the destination archive(s) in case they are being created somewhere in the source directory path
 destination_name_without_path = os.path.basename(destination_basename);
 process_strings.append('-X')
-process_strings.append(destination_name_without_path + '*.*.dar'
+process_strings.append(destination_name_without_path + '*.*.dar');
 
 # log values from process_strings
 i = 1
@@ -105,9 +110,9 @@ if return_code > 0:
 log.info('dar create archive return value=' + str(return_code))
 
 # if not error, then continue on to test
-if return_code = 0:
+if return_code == 0:
     test_process_strings = []
-    test_process_strings.append('/usr/bin/dar')
+    add_dar_path_to_process_strings(params, test_process_strings)
     # test archive just created
     test_process_strings.append('-t')
     test_process_strings.append(destination_basename)    
