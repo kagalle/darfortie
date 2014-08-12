@@ -25,4 +25,21 @@ def remove_slice_number_and_extension(full_previous_file):
         retval = full_previous_file[0:index]
     return retval
     
-
+# This is done - but it really should be changed to support a new option for specifying
+# an alternate path for the previous file to be found in.
+# search for just the base name using rfind.
+# This is not yet used.
+def get_previous_file_date_time(dest_path_and_base_name, previous_file):
+    # dest_path_and_base_name: 'destination/asus_root_system_daily'
+    # previous_file:           'destination/asus_root_system_daily_20131227_0347UTC'
+    retval = None
+    base_position = previous_file.find(dest_path_and_base_name)
+    if base_position is not None:
+        # calculate index of just past the base name
+        date_start_index = base_position + len(dest_path_and_base_name) + 1
+        # the date/time will always be 16 characters long
+        date_end_index = date_start_index + 16
+        # slice off the date portion of the previous file
+        previous_date = previous_file[date_start_index:date_end_index]
+        retval = previous_date
+    return retval

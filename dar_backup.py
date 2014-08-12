@@ -16,9 +16,19 @@
 #      2yy, where yy is any error value returned from dar during archive testing.
 #        dar return values range from 1 to 11 (see dar man page, "EXIT CODES")
 #      Returns 0 on success (both create and test succeeded).
+
 # TODO: test for existance of dar and if not found exit with error code.
+#  currently I think subprocess would fail and return with some error code - could test this and see.
+
 # TODO: add support for restoring a batch of archives
 # TODO: packaging: http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
+
+# TODO: currently no support for dar catalog files - they will be named differently and I need to deal with the alternate naming properly.
+# dar has no convension for the name created (it has to be specified with -C, so we create the convension -
+# "destination/asus_root_system_daily_20131227_0347UTC_catalog.1.dar"
+
+# TODO: incremental names should be of the form base_name_<current-date-time>_based_on_<previous_date_time>...
+# TODO: currently no support for having the having the previous file in a folder different than the target folder.
 
 import subprocess
 import logging
@@ -64,7 +74,7 @@ date_string = date_now.strftime("%Y%m%d_%H%M") + "UTC"
 log.info("date_string=" + date_string)
 
 # create the destination basename (includes path, if any)
-destination_basename = params['dest_path_and_base_name'] + "_" + date_string
+destination_basename = params['dest_path_and_base_name'] + "T" + date_string
 log.info("destination_basename=" + destination_basename)
 
 # archive to create
