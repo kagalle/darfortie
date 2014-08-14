@@ -44,6 +44,11 @@ def parse():
         help="search for previous backup to use for incremental backup (dar -A).  " +
         "Finds most recent like-named backup in destination folder.")
     
+    # -I --previous_path: path to location of previous file for use by incremental option
+    p.add_option("-I", "--previous_path", action="store", dest="previous_path", metavar="previous_path", 
+        help="search for previous backup to use for incremental backup (dar -A).  " +
+        "Finds most recent like-named backup in destination folder.")
+
     # dictionary to return
     params = {}
 
@@ -60,6 +65,7 @@ def parse():
     params['config'] = opts.conf
     params['prune'] = opts.prune
     params['incremental'] = opts.incremental
+    params['previous_path'] = opts.previous_path
     params['source_path'] = args[0]
     params['dest_path_and_base_name'] = args[1]
 
@@ -74,6 +80,7 @@ def parse():
     log.info("params:incremental=" + str(params['incremental']))
     log.info("params:source_path=" + str(params['source_path']))
     log.info("params:dest_path_and_base_name=" + str(params['dest_path_and_base_name']))
+    log.info("params:previous_path=" + str(params['previous_path']))
 
     return params
 
