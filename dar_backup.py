@@ -27,7 +27,6 @@
 # dar has no convension for the name created (it has to be specified with -c, so we create the convension -
 # "destination/asus_root_system_daily_20131227_0347UTC_catalog.1.dar"
 
-# TODO: incremental names should be of the form base_name_<current-date-time>_based_on_<previous_date_time>...
 
 import subprocess
 import logging
@@ -76,16 +75,14 @@ log.info("date_string=" + date_string)
 destination_basename = params['dest_path_and_base_name'] + "_" + date_string
 log.info("destination_basename=" + destination_basename)
 
-# archive to create
-process_strings.append('-c')
-process_strings.append(destination_basename)
-
 # incremental
 if params['incremental']:
     # if user specified a different path for the previous file, swap out the paths
     if params['previous_path'] is not None:
+        dest_basename = os.path.basename(params['dest_path_and_base_name'])
+        
         # get base name without path and combine with the new path
-        path_and_basename_to_search = os.path.join(params['previous_path'], os.path.basename(params['dest_path_and_base_name']))
+        path_and_basename_to_search = os.path.join(params['previous_path'], dest_basename)
     else:
         path_and_basename_to_search = params['dest_path_and_base_name']
         
@@ -100,12 +97,20 @@ if params['incremental']:
         if previous_file is not None:
             process_strings.append('-A')
             process_strings.append(previous_file)
+
+            # add previous date/time to current filename
+            previous_datetime = dar_backup_previous_file.get_previous_file_date_time(dest_basename, previous_file) 
+            destination_basename = destination_basename + "_based_on_" + previous_datetime
         else:
             log.error("Unable to find previous file for incremental backup")
             exit(3)
     else:
         log.error("Unable to find previous file for incremental backup")
         exit(3)
+
+# archive to create
+process_strings.append('-c')
+process_strings.append(destination_basename)
 
 # define prune paramter string
 if params['prune'] is not None:
