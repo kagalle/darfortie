@@ -24,11 +24,10 @@
 # TODO: packaging: http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
 
 # TODO: currently no support for dar catalog files - they will be named differently and I need to deal with the alternate naming properly.
-# dar has no convension for the name created (it has to be specified with -C, so we create the convension -
+# dar has no convension for the name created (it has to be specified with -c, so we create the convension -
 # "destination/asus_root_system_daily_20131227_0347UTC_catalog.1.dar"
 
 # TODO: incremental names should be of the form base_name_<current-date-time>_based_on_<previous_date_time>...
-# TODO: currently no support for having the having the previous file in a folder different than the target folder.
 
 import subprocess
 import logging
@@ -70,11 +69,11 @@ process_strings.append(params['source_path'])
 
 # get the current date/time in a string usage as a suffix to the filename
 date_now = datetime.datetime.utcnow()
-date_string = date_now.strftime("%Y%m%d_%H%M") + "UTC"
+date_string = date_now.strftime("%Y%m%dT%H%M") + "UTC"
 log.info("date_string=" + date_string)
 
 # create the destination basename (includes path, if any)
-destination_basename = params['dest_path_and_base_name'] + "T" + date_string
+destination_basename = params['dest_path_and_base_name'] + "_" + date_string
 log.info("destination_basename=" + destination_basename)
 
 # archive to create
@@ -83,9 +82,17 @@ process_strings.append(destination_basename)
 
 # incremental
 if params['incremental']:
+    # if user specified a different path for the previous file, swap out the paths
+    if params['previous_path'] is not None:
+        # get base name without path and combine with the new path
+        path_and_basename_to_search = os.path.join(params['previous_path'], os.path.basename(params['dest_path_and_base_name']))
+    else:
+        path_and_basename_to_search = params['dest_path_and_base_name']
+        
+    log.info("path_and_basename_to_search=" + path_and_basename_to_search)
     # get list of files and dates, sort and take newest one
-    # strip of .xx.dar
-    full_previous_file = dar_backup_previous_file.get_previous_file(params['dest_path_and_base_name'])
+    # strip off .xx.dar
+    full_previous_file = dar_backup_previous_file.get_previous_file(path_and_basename_to_search)
     log.info("full_previous_file=" + full_previous_file)
     if full_previous_file is not None:
         previous_file = dar_backup_previous_file.remove_slice_number_and_extension(full_previous_file)
@@ -93,6 +100,12 @@ if params['incremental']:
         if previous_file is not None:
             process_strings.append('-A')
             process_strings.append(previous_file)
+        else:
+            log.error("Unable to find previous file for incremental backup")
+            exit(3)
+    else:
+        log.error("Unable to find previous file for incremental backup")
+        exit(3)
 
 # define prune paramter string
 if params['prune'] is not None:
