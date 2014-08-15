@@ -1,5 +1,6 @@
 # Script Name: dar_backup.py
 # Author: Ken Galle
+# License: 
 # Description: Adds functionality to the dar utility and in the process makes it
 #    simpler to use, although to do this it does make some assumptions and hides
 #    some functionality (which comes from the enormous list of dar switches).
@@ -10,21 +11,27 @@
 #    It provides a way to specify a configuration file for dar without worrying
 #    about the current environment (/etc/darrc, ~/.darrc).
 #    It also allows you to pass thru dar prune paths.
+
 # Note on destination naming convensions:  TODO
+
 #    Return values:
 #      1xx, where xx is any error value returned from dar during archive creation.
 #      2yy, where yy is any error value returned from dar during archive testing.
 #        dar return values range from 1 to 11 (see dar man page, "EXIT CODES")
 #      Returns 0 on success (both create and test succeeded).
+#
+# TODO: attempt to uncover additional exceptions that are not handled and assign
+#  error codes to these.
 
 # TODO: test for existance of dar and if not found exit with error code.
-#  currently I think subprocess would fail and return with some error code - could test this and see.
+#  Currently the subprocess fails and returns with error code of 1.
 
 # TODO: add support for restoring a batch of archives
+
 # TODO: packaging: http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
 
-# TODO: currently no support for dar catalog files - they will be named differently and I need to deal with the alternate naming properly.
-# dar has no convension for the name created (it has to be specified with -c, so we create the convension -
+# TODO: Make sure dar catalog files also work as previous backup reference;
+# dar has no convension for the name created (it has to be specified with -c), so we create the convension -
 # "destination/asus_root_system_daily_20131227_0347UTC_catalog.1.dar"
 
 
@@ -77,10 +84,9 @@ log.info("destination_basename=" + destination_basename)
 
 # incremental
 if params['incremental']:
+    dest_basename = os.path.basename(params['dest_path_and_base_name'])
     # if user specified a different path for the previous file, swap out the paths
     if params['previous_path'] is not None:
-        dest_basename = os.path.basename(params['dest_path_and_base_name'])
-        
         # get base name without path and combine with the new path
         path_and_basename_to_search = os.path.join(params['previous_path'], dest_basename)
     else:

@@ -1,3 +1,8 @@
+# Script Name: dar_backup.py
+# Author: Ken Galle
+# License: 
+# Description: returns a dictionary of values to be used as parameters in the dar command:
+
 import glob
 import os.path
 from operator import itemgetter

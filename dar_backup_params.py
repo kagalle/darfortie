@@ -1,12 +1,16 @@
-import optparse
-import logging
-# returns a dictionary of values to be used as parameters in the dar command:
+# Script Name: dar_backup.py
+# Author: Ken Galle
+# License: 
+# Description: returns a dictionary of values to be used as parameters in the dar command:
 #   dar_path : path and name to dar executable, optional, defaults to 'dar'
 #   config : string, possibly None
 #   prune : list of string, possibly empty
 #   incremental : boolean 
 #   source_path : string
 #   dest_path_and_base_name : string
+
+import optparse
+import logging
 
 # Keep the dar switches explicitly on the dar command line instead of buried in variables.
 # so the params{} dictionary is fine, but without putting in, e.g. -R, etc.
@@ -42,12 +46,12 @@ def parse():
     # -i --incremental: enable incremental (dar -A) mode
     p.add_option("-i", "--incremental", action="store_true", dest="incremental", default=False, 
         help="search for previous backup to use for incremental backup (dar -A).  " +
-        "Finds most recent like-named backup in destination folder.")
+        "Finds most recent like-named backup in destination path.")
     
     # -I --previous_path: path to location of previous file for use by incremental option
     p.add_option("-I", "--previous_path", action="store", dest="previous_path", metavar="previous_path", 
-        help="search for previous backup to use for incremental backup (dar -A).  " +
-        "Finds most recent like-named backup in destination folder.")
+        help="alters the behavior of --incremental such that the search for a previous " +
+        "backup file is done in previous_path, instead of the destination path.")
 
     # dictionary to return
     params = {}
