@@ -21,7 +21,8 @@ import logging
 #   incremental boolean
 def parse():
     log = logging.getLogger('dar_backup_params')
-    usageString = "usage: %prog [options] <source_path> <dest_path_and_base_name>"
+    usageString = "usage: \n%prog [common-options] [backup-options] <source_path> <dest_path_and_base_name>\n" + \
+                  "%prog [common-options] [restore-options] <dar_path_and_base_name> <destination_path>"
     descriptionString = "A front-end for dar that supports incremental backups based on " + \
     "the existing backups found in the destination folder.  <source_path> is the " + \
     "root path to back up (dar -R).  <dest_path_and_base_name> is the dar base name.  This " + \
@@ -30,6 +31,8 @@ def parse():
     epilogString = "Based on http://dar.linux.free.fr/doc/mini-howto/dar-differential-backup-mini-howto.en.html"
     p = optparse.OptionParser(usage=usageString, description=descriptionString, epilog=epilogString)
 
+#common options
+
     # -d --dar: dar filespec --> dar_path
     p.add_option("-d", "--dar", action="store", dest="dar_path", metavar="dar_filespec",
         help="filespec of dar executable; defaults to 'dar'")
@@ -37,10 +40,12 @@ def parse():
     # -c --config: specify .dar config file --> conf
     p.add_option("-c", "--config", action="store", dest="conf", metavar="config_filespec",
         help="filespec of dar config file to use instead of .darrc or etc/darrc.")
-    
+
+#backup options
+
     # -P --prune: add dar prune paths --> prune
     p.add_option("-P", "--prune", action="append", dest="prune", metavar="prune_path",
-        help="dar -P (prune) paths to add to call to dar. Path should be relative to " +
+        help="Specify prune paths (dar -P) to add to call to dar. Paths should be relative to " +
         "<source_path>.  This option can be repeated as needed.")
     
     # -i --incremental: enable incremental (dar -A) mode
@@ -52,6 +57,8 @@ def parse():
     p.add_option("-I", "--previous_path", action="store", dest="previous_path", metavar="previous_path", 
         help="alters the behavior of --incremental such that the search for a previous " +
         "backup file is done in previous_path, instead of the destination path.")
+
+#restore options  (need parse_args() grouping feature
 
     # dictionary to return
     params = {}
