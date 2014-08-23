@@ -66,7 +66,8 @@ add_dar_path_to_process_strings(params, process_strings)
 
 # define config parameter string
 if params['config'] is not None:
-    process_strings.append('--noconf --batch ')
+    process_strings.append('--noconf')
+    process_strings.append('--batch')
     process_strings.append(params['config'])
 
 # source (root) path
