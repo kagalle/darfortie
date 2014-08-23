@@ -64,12 +64,6 @@ process_strings = []
 
 add_dar_path_to_process_strings(params, process_strings)
 
-# define config parameter string
-if params['config'] is not None:
-    process_strings.append('--noconf')
-    process_strings.append('--batch')
-    process_strings.append(params['config'])
-
 # source (root) path
 process_strings.append('-R')
 process_strings.append(params['source_path'])
@@ -118,6 +112,13 @@ if params['incremental']:
 # archive to create
 process_strings.append('-c')
 process_strings.append(destination_basename)
+
+# define config parameter string
+# because of conditionals within config file (e.g. 'create:') this has to come after dar -c option.
+if params['config'] is not None:
+    process_strings.append('--noconf')
+    process_strings.append('--batch')
+    process_strings.append(params['config'])
 
 # define prune paramter string
 if params['prune'] is not None:
