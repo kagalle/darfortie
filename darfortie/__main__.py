@@ -52,99 +52,99 @@ def add_dar_path_to_process_strings(params, process_strings):
 def main():
     logging.basicConfig(level=logging.INFO)
     log = logging.getLogger('darfortie')
-
+    
     # params to directly use in the call to dar
     params = {}
-
+    
     # get params
     params = darfortie_params.parse()
-
+    
     # build up a list of strings to send into the subprocess
     process_strings = []
-
+    
     add_dar_path_to_process_strings(params, process_strings)
-
+    
     # source (root) path
     process_strings.append('-R')
     process_strings.append(params['source_path'])
-
+    
     # get the current date/time in a string usage as a suffix to the filename
     date_now = datetime.datetime.utcnow()
     date_string = date_now.strftime("%Y%m%dT%H%M") + "UTC"
     log.info("date_string=" + date_string)
-
+    
     # create the destination basename (includes path, if any)
     destination_basename = params['dest_path_and_base_name'] + "_" + date_string
     log.info("destination_basename=" + destination_basename)
-
+    
     # incremental
     if params['incremental']:
         dest_basename = os.path.basename(params['dest_path_and_base_name'])
-    # if user specified a different path for the previous file, swap out the paths
-    if params['previous_path'] is not None:
-        # get base name without path and combine with the new path
-        path_and_basename_to_search = os.path.join(params['previous_path'], dest_basename)
-    else:
-        path_and_basename_to_search = params['dest_path_and_base_name']
-
-    log.info("path_and_basename_to_search=" + path_and_basename_to_search)
-    # get list of files and dates, sort and take newest one
-    # strip off .xx.dar
-    full_previous_file = darfortie_previous_file.get_previous_file(path_and_basename_to_search)
-    log.info("full_previous_file=" + full_previous_file)
-    if full_previous_file is not None:
-        previous_file = darfortie_previous_file.remove_slice_number_and_extension(full_previous_file)
-        log.info("previous_file=" + previous_file)
-        if previous_file is not None:
-            process_strings.append('-A')
+        # if user specified a different path for the previous file, swap out the paths
+        if params['previous_path'] is not None:
+            # get base name without path and combine with the new path
+            path_and_basename_to_search = os.path.join(params['previous_path'], dest_basename)
+        else:
+            path_and_basename_to_search = params['dest_path_and_base_name']
+        
+        log.info("path_and_basename_to_search=" + path_and_basename_to_search)
+        # get list of files and dates, sort and take newest one
+        # strip off .xx.dar
+        full_previous_file = darfortie_previous_file.get_previous_file(path_and_basename_to_search)
+        log.info("full_previous_file=" + full_previous_file)
+        if full_previous_file is not None:
+            previous_file = darfortie_previous_file.remove_slice_number_and_extension(full_previous_file)
+            log.info("previous_file=" + previous_file)
+            if previous_file is not None:
+                process_strings.append('-A')
                 process_strings.append(previous_file)
-
+    
                 # add previous date/time to current filename
                 previous_datetime = darfortie_previous_file.get_previous_file_date_time(dest_basename, previous_file)
                 destination_basename = destination_basename + "_based_on_" + previous_datetime
+            else:
+                log.error("Unable to find previous file for incremental backup")
+                exit(3)
         else:
             log.error("Unable to find previous file for incremental backup")
             exit(3)
-    else:
-        log.error("Unable to find previous file for incremental backup")
-        exit(3)
-
+    
     # archive to create
     process_strings.append('-c')
     process_strings.append(destination_basename)
-
+    
     # define config parameter string
     # because of conditionals within config file (e.g. 'create:') this has to come after dar -c option.
     if params['config'] is not None:
         process_strings.append('--noconf')
         process_strings.append('--batch')
         process_strings.append(params['config'])
-
+    
     # define prune paramter string
     if params['prune'] is not None:
-    for onePath in params['prune']:
-        process_strings.append('-P')
-        process_strings.append(onePath)
-
+        for onePath in params['prune']:
+            process_strings.append('-P')
+            process_strings.append(onePath)
+    
     # exclude the destination archive(s) in case they are being created somewhere in the source directory path
     destination_name_without_path = os.path.basename(destination_basename);
     process_strings.append('-X')
     process_strings.append(destination_name_without_path + '*.*.dar');
-
+    
     # log values from process_strings
     i = 1
     for process_string in process_strings:
         log.info(str(i) + ' : ' + process_string)
-        del(i)
-
+    del(i)
+    
     # make call to dar
     return_code = subprocess.call(process_strings, shell=False)
     if return_code > 0:
         return_code = return_code + 100
-
+    
     # log return value
     log.info('dar create archive return value=' + str(return_code))
-
+    
     # if not error, then continue on to test
     if return_code == 0:
         test_process_strings = []
@@ -156,8 +156,8 @@ def main():
         test_return_code = subprocess.call(test_process_strings, shell=False)
         # log return value
         log.info('dar test archive return value=' + str(test_return_code))
-    if test_return_code > 0:
-        return_code = test_return_code + 200
+        if test_return_code > 0:
+            return_code = test_return_code + 200
     exit(return_code)
 
 if __name__ == '__main__':
