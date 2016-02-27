@@ -1,0 +1,5 @@
+.darrc can be placed in the home directory and is read by dar when it runs.
+--noconf disables this behavior
+--batch can be used to specify a similar config file manually on the command line, when dar is run.
+  --> both of these make up the -c option in dar_backup.sh
+

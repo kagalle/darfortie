@@ -7,44 +7,14 @@
 # -P [<darpath>/][<filespec>] = don't backup path/filespec  (the archive - mypath/myarchive.*.dar"; relative to -R
 
 create:
-
 # don't cross file system boundaries
---no-mount-points
+-M 
 # gzip the files archived
 --gzip=5 
-# min size to be compressed
--m 256
-# slice size - under 2G, 4 fit evenly on DVD
---slice 1120M
-# don't gzip these type files -Z == --exclude-compression
--Z "*.afio" 
--Z "*.bz2" 
--Z "*.dar" 
--Z "*.divx" 
--Z "*.flv" 
--Z "*.gif" 
--Z "*.gz" 
--Z "*.jpeg" 
--Z "*.jpg" 
--Z "*.mov" 
--Z "*.mp3" 
--Z "*.mp4" 
--Z "*.mpeg" 
--Z "*.mpg" 
--Z "*.ogg" 
--Z "*.png" 
--Z "*.swf" 
--Z "*.tgz" 
--Z "*.wma" 
--Z "*.wmv" 
--Z "*.zip" 
-
-# in case file-system/files restored - supress warnings
--asecu
-
-all:
-
---verbose
+# don't gzip these type files
+-Z "*.zip" -Z "*.jpg" -Z "*.jpeg" -Z "*.bz2" -Z "*.gz" -Z "*.gif" -Z "*.png" -Z "*.mpg" -Z "*.mpeg" -Z "*.mp4" -Z "*.wmv" -Z "*.flv" -Z "*.swf" -Z "*.mov" -Z "*.divx" -Z "*.mp3" -Z "*.ogg" -Z "*.wma" -Z "*.dar" -Z "*.afio" 
+# verbose
+-v 
 
 
 
