@@ -21,8 +21,9 @@ import logging
 #   incremental boolean
 def parse():
     log = logging.getLogger('darfortie_params')
-    usageString = "usage: \n%prog [common-options] [backup-options] <source_path> <dest_path_and_base_name>\n" + \
-                  "%prog [common-options] [restore-options] <dar_path_and_base_name> <destination_path>"
+    usageString = "usage: \n%prog [common-options] [backup-options] <source_path> <dest_path_and_base_name>\n"
+                  # + \
+                  # "%prog [common-options] [restore-options] <dar_path_and_base_name> <destination_path>"
     descriptionString = "A front-end for dar that supports incremental backups based on " + \
     "the existing backups found in the destination folder.  <source_path> is the " + \
     "root path to back up (dar -R).  <dest_path_and_base_name> is the dar base name.  This " + \
