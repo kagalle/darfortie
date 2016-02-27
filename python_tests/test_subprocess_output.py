@@ -1,13 +1,13 @@
 # results of test:
-#   ken@asus ~/dar_backup_script $ ./test_subprocess_output.py > 1.out
+#   ken@asus ~/darfortie_script $ ./test_subprocess_output.py > 1.out
 #   test going into stderr
-#   ken@asus ~/dar_backup_script $ ./test_subprocess_output.py 2> 2.out
+#   ken@asus ~/darfortie_script $ ./test_subprocess_output.py 2> 2.out
 #   test going to stdout
-#   ken@asus ~/dar_backup_script $ cat 1.out 
+#   ken@asus ~/darfortie_script $ cat 1.out 
 #   test going to stdout
-#   ken@asus ~/dar_backup_script $ cat 2.out
+#   ken@asus ~/darfortie_script $ cat 2.out
 #   test going into stderr
-#   ken@asus ~/dar_backup_script $
+#   ken@asus ~/darfortie_script $
 #
 # The output to both stdout and stderr get passed though the python script
 # into the shell as you would hope for, without doing anything special

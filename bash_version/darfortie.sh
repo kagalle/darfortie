@@ -1,6 +1,7 @@
 #!/bin/bash
-# dar_diff_backup.sh
+# darfortie.sh
 # Modified from http://dar.linux.free.fr/doc/mini-howto/dar-differential-backup-mini-howto.en.html
+# License: GPLv3
 
 # Exit with exit status on the first thing that errors -
 #   ie. don't test archive, if archive create failed.
@@ -13,28 +14,7 @@ set -u
 # Example "slice base name":   asus_root_gentoo_system_daily
 #                             <host><user><task name><frequency>
 
-# test run (last one done): ./dar_backup.sh -i -c /home/ken/dar_backup_script/dar_backup.conf -P ignore 
-#       /home/ken/dar_backup_script /home/ken/dar_backup_script/destination asus_root_system_daily
-#
-#    ./test.sh
-#    ./destination
-#    ./destination/asus_root_system_daily_20130101_0000UTC.1.dar*  (fake archive)
-#    ./destination/asus_root_system_daily_20131227_0252UTC.1.dar*
-#    ./destination/asus_root_system_daily_20131227_0254UTC.1.dar*
-#    ./destination/asus_root_system_daily_20131227_0257UTC.1.dar*+
-#    ./int.sh
-#    ./ignore*
-#    ./ignore/ignore.txt*
-#    ./test2.sh
-#    ./dar_backup.sh~
-#    ./dar_backup.sh
-#    ./quote.sh
-#    ./dar_backup.conf
-#
-#  * = these don't get added to archive.
-#  + = these are incremental
-
-useage="Useage: dar_backup.sh [-c <config filespec>][-i] [-P <prune directory relative to -R>]... \n\t\t<source path> <destination path> <slice base name>\n -i == incremental backup" 
+useage="Useage: darfortie.sh [-c <config filespec>][-i] [-P <prune directory relative to -R>]... \n\t\t<source path> <destination path> <slice base name>\n -i == incremental backup" 
 
 incremental=0
 prune=""

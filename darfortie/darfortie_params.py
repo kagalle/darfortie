@@ -1,11 +1,11 @@
-# Script Name: dar_backup.py
+# Script Name: darfortie.py
 # Author: Ken Galle
-# License: 
+# License: GPLv3
 # Description: returns a dictionary of values to be used as parameters in the dar command:
 #   dar_path : path and name to dar executable, optional, defaults to 'dar'
 #   config : string, possibly None
 #   prune : list of string, possibly empty
-#   incremental : boolean 
+#   incremental : boolean
 #   source_path : string
 #   dest_path_and_base_name : string
 
@@ -20,7 +20,7 @@ import logging
 #   prune parameter string
 #   incremental boolean
 def parse():
-    log = logging.getLogger('dar_backup_params')
+    log = logging.getLogger('darfortie_params')
     usageString = "usage: \n%prog [common-options] [backup-options] <source_path> <dest_path_and_base_name>\n" + \
                   "%prog [common-options] [restore-options] <dar_path_and_base_name> <destination_path>"
     descriptionString = "A front-end for dar that supports incremental backups based on " + \
@@ -47,14 +47,14 @@ def parse():
     p.add_option("-P", "--prune", action="append", dest="prune", metavar="prune_path",
         help="Specify prune paths (dar -P) to add to call to dar. Paths should be relative to " +
         "<source_path>.  This option can be repeated as needed.")
-    
+
     # -i --incremental: enable incremental (dar -A) mode
-    p.add_option("-i", "--incremental", action="store_true", dest="incremental", default=False, 
+    p.add_option("-i", "--incremental", action="store_true", dest="incremental", default=False,
         help="search for previous backup to use for incremental backup (dar -A).  " +
         "Finds most recent like-named backup in destination path.")
-    
+
     # -I --previous_path: path to location of previous file for use by incremental option
-    p.add_option("-I", "--previous_path", action="store", dest="previous_path", metavar="previous_path", 
+    p.add_option("-I", "--previous_path", action="store", dest="previous_path", metavar="previous_path",
         help="alters the behavior of --incremental such that the search for a previous " +
         "backup file is done in previous_path, instead of the destination path.")
 
@@ -65,13 +65,13 @@ def parse():
 
     # parse command line
     opts, args = p.parse_args()
-    
+
     # Note optparse errors return exit code 2.
-    
+
     if len(args) != 2:
         p.print_usage()
         exit(1)
-    
+
     params['dar_path'] = opts.dar_path
     params['config'] = opts.conf
     params['prune'] = opts.prune
@@ -94,4 +94,3 @@ def parse():
     log.info("params:previous_path=" + str(params['previous_path']))
 
     return params
-
