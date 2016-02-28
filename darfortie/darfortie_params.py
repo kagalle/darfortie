@@ -86,9 +86,9 @@ def parse():
     if params['prune'] is None:
         log.info("params:prune is None")
     else:
-        log.info("params:prune count=" + len(params['prune']))
+        log.info("params:prune count=" + str(len(params['prune'])))
         for onePath in params['prune']:
-            log.info("params:prune=" + onePath)
+            log.info("params:prune=" + str(onePath))
     log.info("params:incremental=" + str(params['incremental']))
     log.info("params:source_path=" + str(params['source_path']))
     log.info("params:dest_path_and_base_name=" + str(params['dest_path_and_base_name']))

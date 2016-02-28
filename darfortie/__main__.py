@@ -34,6 +34,9 @@
 # dar has no convension for the name created (it has to be specified with -c), so we create the convension -
 # "destination/asus_root_system_daily_20131227_0347UTC_catalog.1.dar"
 
+# TODO: add option to specify path to create a catalog file of the just created archive in; defaults
+# to the dest_path.
+
 
 import subprocess
 import logging
@@ -91,7 +94,7 @@ def main():
         # get list of files and dates, sort and take newest one
         # strip off .xx.dar
         full_previous_file = darfortie_previous_file.get_previous_file(path_and_basename_to_search)
-        log.info("full_previous_file=" + full_previous_file)
+        log.info("full_previous_file=" + str(full_previous_file))
         if full_previous_file is not None:
             previous_file = darfortie_previous_file.remove_slice_number_and_extension(full_previous_file)
             log.info("previous_file=" + previous_file)
