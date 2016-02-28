@@ -37,6 +37,8 @@
 # TODO: add option to specify path to create a catalog file of the just created archive in; defaults
 # to the dest_path.
 
+# TODO: allow the -i switch to be used for the first backup intead of erroring out.
+
 
 import subprocess
 import logging
