@@ -22,16 +22,16 @@ recent reference backup it should use.
 
 --------------
 
-It is suggested that for the base name you adopt a convention such as:
+It is suggested that for the base name you adopt a convention such as::
 
-    ``machine_daily``
+    machine_daily
 
-where “``machine``” is the machine name being backed up, and “``daily``”
+where “`machine`” is the machine name being backed up, and “`daily`”
 is for daily incremental backups. The end result would result in names
-like:
+like::
 
--  ``machine_daily_20160228T0352UTC.1.dar``
--  ``machine_daily_20160228T0403UTC_based_on_20160228T0352UTC.1.dar``
+  machine_daily_20160228T0352UTC.1.dar
+  machine_daily_20160228T0403UTC_based_on_20160228T0352UTC.1.dar
 
 --------------
 
@@ -44,28 +44,17 @@ It also allows you to pass thru dar prune paths.
 
 --------------
 
-The Python version is in the “darfortie” directory and is the newest
-version and most feature rich.
+Install darfortie by running:
 
-Darfortie can be run by calling:
+1.  Installing Python (either v2 or v3) if not already installed.
 
-    ``python [path-leading-to-darfortie/]darfortie``
+2.  Download a configuration file to use with the -c option at https://github.com/kagalle/darfortie/blob/master/darfortie.conf.
 
-for a complete list of options:
+3.  Run ``pip install -i https://pypi.python.org/pypi darfortie``
 
-    ``python darfortie --help``
+For a complete list of options, run::
 
-| Two packaged versions, done according to
-| http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
-| have also been made:
-
-darfortie.zip can be run by calling:
-
-    ``python darfortie.zip``
-
-The Python executable bin/darfortie can be run by calling:
-
-    ``python bin/darfortie``
+    python darfortie --help
 
 --------------
 
@@ -86,5 +75,3 @@ kept ONLY for historical reasons.
 
 There is currently no restore option - use the dar utility directly to
 do restores.
-
---------------
