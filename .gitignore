@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+env[0-9]/
 build/
 develop-eggs/
 dist/
@@ -60,3 +61,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#backup files
+*~
+*.bak

@@ -17,7 +17,7 @@ setup(
     keywords = "dar incremental backup",
     url = "https://github.com/kagalle/darfortie",
     packages=["darfortie"],
-    entry_points={'console_scripts': ['rundarfortie = darfortie.main:main']},
+    entry_points={'console_scripts': ['darfortie = darfortie.darfortie_main:main']},
     long_description=read("README.rst"),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -31,6 +31,8 @@ setup(
         "Operating System :: POSIX :: BSD :: FreeBSD",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
         "Topic :: System :: Archiving :: Backup",
     ],
 )

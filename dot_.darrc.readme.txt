@@ -1,5 +1,7 @@
+Notes concerning config files for dar and darfortie.
+
 .darrc can be placed in the home directory and is read by dar when it runs.
---noconf disables this behavior
+--noconf disables this behavior in dar.
 --batch can be used to specify a similar config file manually on the command line, when dar is run.
-  --> both of these make up the -c option in darfortie.sh
+  --> both of these make up the -c option in darfortie
 
