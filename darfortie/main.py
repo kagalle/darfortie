@@ -44,9 +44,9 @@ import subprocess
 import logging
 import glob
 import os
-import darfortie_params
+from darfortie import darfortie_params
 import datetime
-import darfortie_previous_file
+from darfortie import darfortie_previous_file
 
 def add_dar_path_to_process_strings(params, process_strings):
     if params['dar_path'] is not None:
