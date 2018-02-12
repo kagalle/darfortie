@@ -52,6 +52,26 @@ Install darfortie by running:
 
 3.  Run ``pip install -i https://pypi.python.org/pypi darfortie``
 
+If this is done as a normal user, then the install puts the package in
+
+    /home/ken/.local/lib/python2.7/site-packages/darfortie
+
+and creates an execuatable such that the application can be run by:
+
+    $ ./local/bin/darfortie
+
+If installed as `root`, then the install is done into
+
+    /usr/local/lib/python2.7/dist-packages/darfortie
+
+and the executable is created as:
+
+    /usr/local/bin/darfortie
+
+which is normally on the system PATH.
+
+--------------
+
 For a complete list of options, run::
 
     python darfortie --help
