@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "darfortie",
-    version = "1.0",
+    version = "1.0.1",
     author = "Kenneth Galle",
     author_email = "ken.galle@rainshowers.org",
     description = "A utility that extends and simplifies using dar (Disk ARchive) for doing routine incremental backups.",
