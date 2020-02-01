@@ -11,7 +11,7 @@
 #   dest_path_and_base_name : string
 
 import optparse
-import logging
+#import logging
 
 # Keep the dar switches explicitly on the dar command line instead of buried in variables.
 # so the params{} dictionary is fine, but without putting in, e.g. -R, etc.
@@ -22,7 +22,7 @@ import logging
 #   incremental boolean
 #   text_sort boolean
 def parse():
-    log = logging.getLogger('darfortie_params')
+    #log = logging.getLogger('darfortie_params')
     usageString = "usage: \n%prog [common-options] [backup-options] <source_path> <dest_path_and_base_name>\n"
                   # + \
                   # "%prog [common-options] [restore-options] <dar_path_and_base_name> <destination_path>"
@@ -90,18 +90,18 @@ def parse():
     params['source_path'] = args[0]
     params['dest_path_and_base_name'] = args[1]
 
-    log.info("params:dar_path=" + str(params['dar_path']))
-    log.info("params:config=" + str(params['config']))
-    if params['prune'] is None:
-        log.info("params:prune is None")
-    else:
-        log.info("params:prune count=" + str(len(params['prune'])))
-        for onePath in params['prune']:
-            log.info("params:prune=" + str(onePath))
-    log.info("params:incremental=" + str(params['incremental']))
-    log.info("params:text_sort=" + str(params['text_sort']))
-    log.info("params:source_path=" + str(params['source_path']))
-    log.info("params:dest_path_and_base_name=" + str(params['dest_path_and_base_name']))
-    log.info("params:previous_path=" + str(params['previous_path']))
+    #log.info("params:dar_path=" + str(params['dar_path']))
+    #log.info("params:config=" + str(params['config']))
+    #if params['prune'] is None:
+    #    log.info("params:prune is None")
+    #else:
+    #    log.info("params:prune count=" + str(len(params['prune'])))
+    #    for onePath in params['prune']:
+    #        log.info("params:prune=" + str(onePath))
+    #log.info("params:incremental=" + str(params['incremental']))
+    #log.info("params:text_sort=" + str(params['text_sort']))
+    #log.info("params:source_path=" + str(params['source_path']))
+    #log.info("params:dest_path_and_base_name=" + str(params['dest_path_and_base_name']))
+    #log.info("params:previous_path=" + str(params['previous_path']))
 
     return params

@@ -76,11 +76,10 @@ def main():
     # get the current date/time in a string usage as a suffix to the filename
     date_now = datetime.datetime.utcnow()
     date_string = date_now.strftime("%Y%m%dT%H%M") + "UTC"
-    log.info("date_string=" + date_string)
+    #log.info("date_string=" + date_string)
     
     # create the destination basename (includes path, if any)
     destination_basename = params['dest_path_and_base_name'] + "_" + date_string
-    log.info("destination_basename=" + destination_basename)
     
     # incremental
     if params['incremental']:
@@ -92,30 +91,30 @@ def main():
         else:
             path_and_basename_to_search = params['dest_path_and_base_name']
         
-        log.info("path_and_basename_to_search=" + path_and_basename_to_search)
+        #log.info("path_and_basename_to_search=" + path_and_basename_to_search)
         # get list of files and dates, sort and take newest one
         # strip off .xx.dar
         full_previous_file = darfortie_previous_file.get_previous_file(
             path_and_basename_to_search, params['text_sort'])
-        log.info("full_previous_file=" + str(full_previous_file))
+        #log.info("full_previous_file=" + str(full_previous_file))
         if full_previous_file is not None:
             previous_file = darfortie_previous_file.remove_slice_number_and_extension(full_previous_file)
-            log.info("previous_file=" + previous_file)
+            #log.info("previous_file=" + previous_file)
             if previous_file is not None:
                 process_strings.append('-A')
                 process_strings.append(previous_file)
     
                 # add previous date/time to current filename
                 previous_datetime = darfortie_previous_file.get_previous_file_date_time(dest_basename, previous_file)
-                log.info("previous_datetime = " + previous_datetime)
+                #log.info("previous_datetime = " + previous_datetime)
                 destination_basename = destination_basename + "_based_on_" + previous_datetime
-                log.info("destination_basename = " + destination_basename)
             else:
                 log.error("Unable to find previous file for incremental backup")
                 exit(3)
         else:
             log.error("Unable to find previous file for incremental backup")
             exit(3)
+    log.info("destination_basename = " + destination_basename)
     
     # archive to create
     process_strings.append('-c')
@@ -140,10 +139,8 @@ def main():
     process_strings.append(destination_name_without_path + '*.*.dar');
     
     # log values from process_strings
-    i = 1
-    for process_string in process_strings:
-        log.info(str(i) + ' : ' + process_string)
-    del(i)
+    #for process_string in process_strings:
+    #    log.info('  ' + process_string)
     
     # make call to dar
     return_code = subprocess.call(process_strings, shell=False)
@@ -155,6 +152,7 @@ def main():
     
     # if not error, then continue on to test
     if return_code == 0:
+        log.info('Verifying archive...')
         test_process_strings = []
         add_dar_path_to_process_strings(params, test_process_strings)
         # test archive just created

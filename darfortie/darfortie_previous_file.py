@@ -3,18 +3,17 @@
 # License: GPLv3
 # Description: returns a dictionary of values to be used as parameters in the dar command:
 
-import logging
+#import logging
 import glob
 import os.path
 from operator import itemgetter
 
 # returns previous filename
 def get_previous_file(dest_path_and_base_name, text_sort):
-    logging.basicConfig(level=logging.INFO)
-    log = logging.getLogger('darfortie')
+    #log = logging.getLogger('darfortie_previous_file')
 
     retval = None
-    log.info("going into glob.glob = " + dest_path_and_base_name + "*.1.dar")
+    #log.info("going into glob.glob = " + dest_path_and_base_name + "*.1.dar")
     filelist = glob.glob(dest_path_and_base_name + "*.1.dar")
     if len(filelist) > 0:
         filedata = []
@@ -28,11 +27,11 @@ def get_previous_file(dest_path_and_base_name, text_sort):
         else:
             sorted_list = sorted(filedata, key=itemgetter(1), reverse=True)
 
-        for myfile in sorted_list:
-            log.info("filelist item = " + myfile[0])
+#        for myfile in sorted_list:
+#            log.info("filelist item = " + myfile[0])
 
         retval = sorted_list[0][0]
-        log.info("chosen item = " + retval)
+#        log.info("chosen item = " + retval)
     return retval
 
 def remove_slice_number_and_extension(full_previous_file):
@@ -43,18 +42,11 @@ def remove_slice_number_and_extension(full_previous_file):
         retval = full_previous_file[0:index]
     return retval
 
-#INFO:darfortie:dest_basename = network_incr
-#INFO:darfortie:previous_file = /mnt/extra/dar_backups/network_incr/network_incr_20171127T0130UTC_based_on_20171104T1613UTC
-#INFO:darfortie:previous_date = network_incr_201
-#INFO:darfortie:previous_datetime = network_incr_201
-#INFO:darfortie:destination_basename = network_incr_20200131T1454UTC_based_on_network_incr_201
-
 def get_previous_file_date_time(dest_basename, previous_file):
-    logging.basicConfig(level=logging.INFO)
-    log = logging.getLogger('darfortie')
+    #log = logging.getLogger('darfortie_previous_file')
 
-    log.info("dest_basename = " + dest_basename)
-    log.info("previous_file = " + previous_file)
+    #log.info("dest_basename = " + dest_basename)
+    #log.info("previous_file = " + previous_file)
     # dest_basename: 'asus_root_system_daily'
     # previous_file:  'destination/asus_root_system_daily_20131227_0347UTC.1.dar'
     retval = None
@@ -66,6 +58,6 @@ def get_previous_file_date_time(dest_basename, previous_file):
         date_end_index = date_start_index + 16
         # slice off the date portion of the previous file
         previous_date = previous_file[date_start_index:date_end_index]
-        log.info("previous_date = " + previous_date)
+        #log.info("previous_date = " + previous_date)
         retval = previous_date
     return retval
