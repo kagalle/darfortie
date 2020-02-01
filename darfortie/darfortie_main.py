@@ -95,7 +95,8 @@ def main():
         log.info("path_and_basename_to_search=" + path_and_basename_to_search)
         # get list of files and dates, sort and take newest one
         # strip off .xx.dar
-        full_previous_file = darfortie_previous_file.get_previous_file(path_and_basename_to_search)
+        full_previous_file = darfortie_previous_file.get_previous_file(
+            path_and_basename_to_search, params['text_sort'])
         log.info("full_previous_file=" + str(full_previous_file))
         if full_previous_file is not None:
             previous_file = darfortie_previous_file.remove_slice_number_and_extension(full_previous_file)
@@ -106,7 +107,9 @@ def main():
     
                 # add previous date/time to current filename
                 previous_datetime = darfortie_previous_file.get_previous_file_date_time(dest_basename, previous_file)
+                log.info("previous_datetime = " + previous_datetime)
                 destination_basename = destination_basename + "_based_on_" + previous_datetime
+                log.info("destination_basename = " + destination_basename)
             else:
                 log.error("Unable to find previous file for incremental backup")
                 exit(3)

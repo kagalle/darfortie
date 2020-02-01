@@ -6,6 +6,7 @@
 #   config : string, possibly None
 #   prune : list of string, possibly empty
 #   incremental : boolean
+#   text_sort : boolean
 #   source_path : string
 #   dest_path_and_base_name : string
 
@@ -19,6 +20,7 @@ import logging
 #   config parameter string
 #   prune parameter string
 #   incremental boolean
+#   text_sort boolean
 def parse():
     log = logging.getLogger('darfortie_params')
     usageString = "usage: \n%prog [common-options] [backup-options] <source_path> <dest_path_and_base_name>\n"
@@ -59,6 +61,12 @@ def parse():
         help="alters the behavior of --incremental such that the search for a previous " +
         "backup file is done in previous_path, instead of the destination path.")
 
+    # -i --incremental: enable incremental (dar -A) mode
+    p.add_option("-t", "--text-sort", action="store_true", dest="text_sort", default=False,
+        help="when searching for the latest previous backup to use, sort by file name instead " +
+        "of sorting my file modification date.  For names that have yyyymmdd, etc dates/times as " +
+        "part of the names.")
+
 #restore options  (need parse_args() grouping feature
 
     # dictionary to return
@@ -77,6 +85,7 @@ def parse():
     params['config'] = opts.conf
     params['prune'] = opts.prune
     params['incremental'] = opts.incremental
+    params['text_sort'] = opts.text_sort
     params['previous_path'] = opts.previous_path
     params['source_path'] = args[0]
     params['dest_path_and_base_name'] = args[1]
@@ -90,6 +99,7 @@ def parse():
         for onePath in params['prune']:
             log.info("params:prune=" + str(onePath))
     log.info("params:incremental=" + str(params['incremental']))
+    log.info("params:text_sort=" + str(params['text_sort']))
     log.info("params:source_path=" + str(params['source_path']))
     log.info("params:dest_path_and_base_name=" + str(params['dest_path_and_base_name']))
     log.info("params:previous_path=" + str(params['previous_path']))
